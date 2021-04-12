@@ -11,8 +11,9 @@ jobs:
             sudo apt-get update
             sudo apt install python3-pip
             sudo pip3 install awsebcli --upgrade
-      - run: cd ~/project/ && npm install && npm run build
-      - run: aws s3 sync ~/project/build s3://todo-crud-app
+      - run: pwd && ls
+      - run: cd ../../ && npm install && npm run build
+      - run: aws s3 sync ../../build s3://todo-crud-app
   build:
     parallelism: 1
     docker:
