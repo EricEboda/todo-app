@@ -11,9 +11,8 @@ jobs:
             sudo apt-get update
             sudo apt install python3-pip
             sudo pip3 install awsebcli --upgrade
-      - run: ls
-      - run: cd ./home/circleci/project && npm install && npm run build
-      - run: aws s3 sync ./home/circleci/project s3://todo-crud-app
+      - run: npm install && npm run build
+      - run: aws s3 sync s3://todo-crud-app
   build:
     parallelism: 1
     docker:
