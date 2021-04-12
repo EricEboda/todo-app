@@ -1,0 +1,41 @@
+<section class="todoapp">
+  <header class="header">
+    <h1>Todo CRUD</h1>
+    <%= if @editing.id do %>
+      <a href="<%= Routes.item_path(@conn, :index) %>" class="new-todo">
+        Creat a new task here
+      </a>
+    <% else %>
+      <%= render "form.html", Map.put(assigns, :action, Routes.item_path(@conn, :create)) %>
+    <% end %>
+  </header>
+  <section class="main" style="display: block;">
+    <input id="toggle-all" class="toggle-all" type="checkbox" />
+    <ul class="todo-list">
+      <%= for item <- @items do %>
+        <li data-id="<%= item.id %>" class="<%= complete(item) %>">
+          <a href="<%= Routes.item_path(@conn, :toggle, item.id) %>"
+            class="toggle <%= checked(item) %>">
+          </a>
+          <div class="view">
+            <%= if item.id == @editing.id do %>
+              <%= render "form.html", Map.put(assigns, :action,
+              Routes.item_path(@conn, :update, item)) %>
+            <% else %>
+              <a href="<%= Routes.item_path(@conn, :edit, item) %>" class="dblclick">
+              <label><%= item.text %></label>
+            </a>
+            <span></span> <!-- used for CSS Double Click -->
+          <% end %>
+             <%= link "", class: "destroy",
+              to: Routes.item_path(@conn, :delete, item), method: :delete,
+              data: [confirm: "Are you sure?"] %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+  <footer class="footer" style="display: block;">
+    <span class="todo-count"><%= remaining_items(@items) %> items left</span>
+  </footer>
+</section>
