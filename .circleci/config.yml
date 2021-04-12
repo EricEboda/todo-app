@@ -1,5 +1,18 @@
 version: 2
 jobs:
+  build_deploy:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run:
+          name: Installing AWS CLI
+          command: |
+            sudo apt-get update
+            sudo apt install python3-pip
+            sudo pip3 install awsebcli --upgrade
+      - run: cd .. && npm install && npm run build
+      - run: aws s3 sync ./app/build s3://todo-crud-app
   build:
     parallelism: 1
     docker:
@@ -54,3 +67,10 @@ jobs:
 
       - store_test_results:
           path: _build/test/lib/hello_phoenix
+
+workflows:
+  version: 2
+  execute_bulk:
+    jobs:
+      - build_deploy
+      - build
